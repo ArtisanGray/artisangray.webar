@@ -1,1 +1,1 @@
-# artisangray.webar
+A short demo of a WebXR enabled applet.
