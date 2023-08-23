@@ -149,7 +149,7 @@ async function activateXR() {
 
 
   // Create a render loop that allows us to draw on the AR view.
-  const onXRFrame = (time, frame) => {
+  const onXRFrame = (time, frame, event) => {
     // Queue up the next draw request.
     session.requestAnimationFrame(onXRFrame);
 
