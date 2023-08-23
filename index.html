@@ -95,22 +95,23 @@ async function activateXR() {
   if (Blorb && blorbSpawn == false) { //creates Blorb
     
     //create eyes of Blorb
-    //const eyeTwo = Eye.clone();
 
     //create hat of Blorb
-    const clone = Blorb.clone();//create blorb at desired position
-    clone.position.copy(reticle.position);
-    clone.position.y += 0.6;
+    ;//create blorb at desired position
+    Blorb.position.copy(reticle.position);
+    Blorb.position.y += 0.6;
 
     Eye.position.copy(clone.position);
-    Eye.position.z += 0.3 //shifting the eye to a nice place.
+    Eye.position.z += 0.27 //shifting the eye to a nice place.
     Eye.position.y += 0.15;
     Eye.position.x += 0.1;
-    curve.aX = reticle.position.x;
-    curve.aY = reticle.position.y;
+    eyeTwo = Eye.clone();
+    eyeTwo.position.x += 0.12;
+
     orbit.rotateX(-Math.PI/2); //rotates the new eliptical to be horizontal
     blorbSpawn = true;
-    scene.add(clone);
+    reticle.visible = false;
+    scene.add(Blorb);
     scene.add(Eye);
     scene.add(ghub);
 
@@ -162,8 +163,8 @@ async function activateXR() {
         const t = (time % 1) / 1;
 
         let p = curve.getPoint(t);
-        curve.aX = clone.position.x;
-    
+        curve.aX = Blorb.position.x;
+        curve.aY = Blorb.position.y;
         ghub.position.x = p.x;
         ghub.position.z = p.y;
         console.log(p.x, p.y);
