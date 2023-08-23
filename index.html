@@ -38,7 +38,6 @@ async function activateXR() {
   const gmap = new THREE.TextureLoader().load( 'media/githublogo.png' );
   const gmat = new THREE.SpriteMaterial ( { map: gmap } );
   const ghub = new THREE.Sprite( gmat );
-  scene.add(ghub);
 
 
   const renderer = new THREE.WebGLRenderer({
@@ -99,6 +98,7 @@ async function activateXR() {
 
     blorbSpawn = true;
     scene.add(clone);
+    scene.add(ghub);
   }
   });
   
@@ -148,7 +148,7 @@ async function activateXR() {
 
         let p = curve.getPoint(t);
     
-        ghub.posiiton.x = p.x;
+        ghub.position.x = p.x;
         ghub.position.z = p.y;
     }
   }
