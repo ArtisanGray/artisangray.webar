@@ -101,7 +101,7 @@ async function activateXR() {
     Blorb.position.copy(reticle.position);
     Blorb.position.y += 0.6;
 
-    Eye.position.copy(clone.position);
+    Eye.position.copy(Blorb.position);
     Eye.position.z += 0.27 //shifting the eye to a nice place.
     Eye.position.y += 0.15;
     Eye.position.x += 0.1;
