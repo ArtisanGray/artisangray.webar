@@ -35,6 +35,11 @@ async function activateXR() {
   const Blorb = new THREE.Mesh( blorbBall, blorbColor );
   let blorbSpawn = false;
 
+  const gmap = new THREE.TextureLoader().load( 'media/githublogo.png' );
+  const gmat = new THREE.SpriteMaterial ( { map: gmap } );
+  const ghub = new THREE.Sprite( gmat );
+  scene.add(ghub);
+
 
   const renderer = new THREE.WebGLRenderer({
     alpha: true,
@@ -85,9 +90,7 @@ async function activateXR() {
 
   session.addEventListener("select", (event) => {
   if (Blorb && blorbSpawn == false) {
-    const gmap = new THREE.TextureLoader().load( 'media/githublogo.png' );
-    const gmat = new THREE.SpriteMaterial ( { map: gmap } );
-    const ghub = new THREE.Sprite( gmat );
+    
     curve.aX = reticle.position.x;
     curve.aY = reticle.position.y;
 
@@ -96,7 +99,6 @@ async function activateXR() {
 
     blorbSpawn = true;
     scene.add(clone);
-    scene.add(ghub);
   }
   });
   
