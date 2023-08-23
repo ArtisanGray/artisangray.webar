@@ -92,10 +92,11 @@ async function activateXR() {
   if (Blorb && blorbSpawn == false) {
     
     curve.aX = reticle.position.x;
-    curve.aY = 0;
+    curve.aY = -0.4;
 
     const clone = Blorb.clone();//create blorb at desired position
     clone.position.copy(reticle.position);
+    clone.position.y += 0.6;
 
     blorbSpawn = true;
     scene.add(clone);
