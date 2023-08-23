@@ -84,7 +84,7 @@ async function activateXR() {
   scene.add(orbit);
 
   session.addEventListener("select", (event) => {
-  if (Blorb) {
+  if (Blorb && blorbSpawn == false) {
     const gmap = new THREE.TextureLoader().load( 'media/githublogo.png' );
     const gmat = new THREE.SpriteMaterial ( { map: gmap } );
     const ghub = new THREE.Sprite( gmat );
@@ -99,7 +99,7 @@ async function activateXR() {
     scene.add(ghub);
   }
   });
-  session.removeEventListener("select", event); //activates the hit only once, and promptly removes the listener after.
+  
   
   
 
