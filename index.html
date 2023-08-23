@@ -30,7 +30,7 @@ async function activateXR() {
   directionalLight.position.set(10, 15, 10);
   scene.add(directionalLight);
 
-  const blorbBall = new THREE.SphereGeometry(3, 16, 16);
+  const blorbBall = new THREE.SphereGeometry(0.3, 16, 16);
   const blorbColor = new THREE.MeshBasicMaterial({color: 0xe875b5});
   const Blorb = new THREE.Mesh( blorbBall, blorbColor );
 
@@ -71,17 +71,45 @@ async function activateXR() {
     scene.add(reticle);
   })
 
-  /*let flower;
-  loader.load("https://immersive-web.github.io/webxr-samples/media/gltf/sunflower/sunflower.gltf", function(gltf) {
-    flower = gltf.scene;
-  });*/
   session.addEventListener("select", (event) => {
   if (Blorb) {
-    const clone = Blorb.clone();
+    const gmap = new THREE.TextureLoader().load( '/media/githublogo.png' );
+    const gmat = new THREE.SpriteMaterial ( { gmap: gmap } );
+    const ghub = new THREE.Sprite( gmat );
+    const curve = new THREE.EllipseCurve(
+    reticle.position.x, reticle.posiiton.y,
+    0.5, 0.5,
+    0, 2*Math.PI,
+    );
+    const points = curve.getSpacedPoints(180);
+    const orbitGeometry = new THREE.BufferGeometry().setFromPoints(points);
+    const orbitMaterial = new THREE.LineBasicMaterial({color: 0x555555, transparent: true, opacity: 0.3});
+    const orbit = new THREE.Line(orbitGeometry, orbitMaterial);
+    orbit.rotateX(-Math.PI/2);//creates a orbit
+
+    const clone = Blorb.clone();//create blorb at desired position
     clone.position.copy(reticle.position);
     scene.add(clone);
+    scene.add(ghub);
+
+    scene.add(orbit);
+    animate();
   }
+  session.removeEventListener("select", event); //activates the hit only once, and promptly removes the listener after.
   });
+  function animate(){
+    const time = 0.0001 * performance.now();
+    const t = (time % 1) / 1;
+
+    let p = curve.getPoint(t);
+    
+    ghub.posiiton.x = p.x;
+    ghub.position.z = p.y;
+
+    session.requestAnimationFrame(animate);
+  }
+  
+  
 
 
   // Create a render loop that allows us to draw on the AR view.
@@ -113,6 +141,7 @@ async function activateXR() {
         reticle.position.set(hitPose.transform.position.x, hitPose.transform.position.y, hitPose.transform.position.z)
         reticle.updateMatrixWorld(true);
       }
+
 
 
       // Render the scene with THREE.WebGLRenderer.
