@@ -118,13 +118,16 @@ async function activateXR() {
     eyeTwo = Eye.clone();
     eyeTwo.position.x += 0.12;
 
-    orbit.rotateX(-Math.PI/2); //rotates the new eliptical to be horizontal
+    orbit.rotateX(-Math.PI/2);
+    curve.aX = Blorb.position.x;
+    curve.aY = Blorb.position.y; //rotates the new eliptical to be horizontal
     blorbSpawn = true;
     reticle.visible = false;
     scene.add(Blorb);
     scene.add (eyeTwo);
     scene.add(Eye);
     scene.add(ghub);
+    scene.add(cone);
 
   }
   });
@@ -174,8 +177,6 @@ async function activateXR() {
         const t = (time % 1) / 1;
 
         let p = curve.getPoint(t);
-        curve.aX = Blorb.position.x;
-        curve.aY = Blorb.position.y;
         ghub.position.x = p.x;
         ghub.position.z = p.y;
         console.log(p.x, p.y);
