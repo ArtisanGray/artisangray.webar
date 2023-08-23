@@ -73,7 +73,7 @@ async function activateXR() {
 
   session.addEventListener("select", (event) => {
   if (Blorb) {
-    const gmap = new THREE.TextureLoader().load( '/media/githublogo.png' );
+    const gmap = new THREE.TextureLoader().load( 'https://github.com/ArtisanGray/artisangray.webar/blob/main/media/githublogo.png' );
     const gmat = new THREE.SpriteMaterial ( { gmap: gmap } );
     const ghub = new THREE.Sprite( gmat );
     const curve = new THREE.EllipseCurve(
