@@ -37,7 +37,7 @@ async function activateXR() {
 
   const eyeBall = new THREE.SphereGeometry(0.015, 16, 16);
   const eyeColor = new THREE.MeshBasicMaterial({color: 0x000000});
-  const Eye = new THREE.Mesh( eye, eyeColor );
+  const Eye = new THREE.Mesh( eyeBall, eyeColor );
 
   const gmap = new THREE.TextureLoader().load( 'media/githublogo.png' );
   const gmat = new THREE.SpriteMaterial ( { map: gmap } );
@@ -101,7 +101,7 @@ async function activateXR() {
     const clone = Blorb.clone();//create blorb at desired position
     clone.position.copy(reticle.position);
     clone.position.y += 0.6;
-    
+
     Eye.position.copy(clone.position);
     Eye.position.z -= 0.15 //shifting the eye to a nice place.
     Eye.position.y += 0.075;
