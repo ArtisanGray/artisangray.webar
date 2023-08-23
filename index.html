@@ -38,6 +38,7 @@ async function activateXR() {
   const gmap = new THREE.TextureLoader().load( 'media/githublogo.png' );
   const gmat = new THREE.SpriteMaterial ( { map: gmap } );
   const ghub = new THREE.Sprite( gmat );
+  ghub.scale.set(0.25, 0.25, 0.25);
 
 
   const renderer = new THREE.WebGLRenderer({
@@ -91,7 +92,7 @@ async function activateXR() {
   if (Blorb && blorbSpawn == false) {
     
     curve.aX = reticle.position.x;
-    curve.aY = reticle.position.y;
+    curve.aY = reticle.position.z;
 
     const clone = Blorb.clone();//create blorb at desired position
     clone.position.copy(reticle.position);
@@ -150,6 +151,7 @@ async function activateXR() {
     
         ghub.position.x = p.x;
         ghub.position.z = p.y;
+        console.log(p.x, p.y);
     }
   }
   session.requestAnimationFrame(onXRFrame);
