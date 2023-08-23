@@ -72,7 +72,7 @@ async function activateXR() {
     scene.add(reticle);
   })
   const curve = new THREE.EllipseCurve(
-    reticle.position.x, reticle.position.z,
+    0, 0,
     0.5, 0.5,
     0, 2*Math.PI,
   );
@@ -88,10 +88,12 @@ async function activateXR() {
     const gmap = new THREE.TextureLoader().load( 'media/githublogo.png' );
     const gmat = new THREE.SpriteMaterial ( { map: gmap } );
     const ghub = new THREE.Sprite( gmat );
-    
+    curve.aX = reticle.position.x;
+    curve.aY = reticle.position.y;
 
     const clone = Blorb.clone();//create blorb at desired position
     clone.position.copy(reticle.position);
+
     blorbSpawn = true;
     scene.add(clone);
     scene.add(ghub);
