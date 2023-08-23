@@ -194,7 +194,6 @@ async function activateXR() {
         let p = curve.getPoint(t);
         ghub.position.x = p.x;
         ghub.position.z = p.y;
-        console.log(p.x, p.y);
     }
   }
   session.requestAnimationFrame(onXRFrame);
