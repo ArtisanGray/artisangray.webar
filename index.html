@@ -35,6 +35,10 @@ async function activateXR() {
   const Blorb = new THREE.Mesh( blorbBall, blorbColor );
   let blorbSpawn = false;
 
+  const eyeBall = new THREE.SphereGeometry(0.015, 16, 16);
+  const eyeColor = new THREE.MeshBasicMaterial({color: 0x000000});
+  const Eye = new THREE.Mesh( eye, eyeColor );
+
   const gmap = new THREE.TextureLoader().load( 'media/githublogo.png' );
   const gmat = new THREE.SpriteMaterial ( { map: gmap } );
   const ghub = new THREE.Sprite( gmat );
@@ -85,22 +89,30 @@ async function activateXR() {
   const orbitGeometry = new THREE.BufferGeometry().setFromPoints(points);
   const orbitMaterial = new THREE.LineBasicMaterial({color: 0x555555, transparent: true, opacity: 0.3});
   const orbit = new THREE.Line(orbitGeometry, orbitMaterial);
-  orbit.rotateX(-Math.PI/2);//creates a orbit
   scene.add(orbit);
 
   session.addEventListener("select", (event) => {
-  if (Blorb && blorbSpawn == false) {
+  if (Blorb && blorbSpawn == false) { //creates Blorb
     
-    curve.aX = reticle.position.x;
-    curve.aY = -0.4;
+    //create eyes of Blorb
+    //const eyeTwo = Eye.clone();
 
+    //create hat of Blorb
     const clone = Blorb.clone();//create blorb at desired position
     clone.position.copy(reticle.position);
     clone.position.y += 0.6;
-
+    
+    Eye.position.copy(clone.position);
+    Eye.position.z -= 0.15 //shifting the eye to a nice place.
+    Eye.position.y += 0.075;
+    Eye.position.x += 0.05;
+    curve.aX = clone.position.x;
+    curve.aY = clone.position.y;
+    orbit.rotateX(-Math.PI/2); //rotates the new eliptical to be horizontal
     blorbSpawn = true;
     scene.add(clone);
     scene.add(ghub);
+
   }
   });
   
