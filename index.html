@@ -103,9 +103,11 @@ async function activateXR() {
     clone.position.y += 0.6;
 
     Eye.position.copy(clone.position);
-    Eye.position.z -= 0.15 //shifting the eye to a nice place.
+    Eye.position.z += 0.16 //shifting the eye to a nice place.
     Eye.position.y += 0.075;
     Eye.position.x += 0.05;
+    curve.aX = clone.position.x;
+    curve.aY = clone.position.y;
     orbit.rotateX(-Math.PI/2); //rotates the new eliptical to be horizontal
     blorbSpawn = true;
     scene.add(clone);
@@ -161,7 +163,6 @@ async function activateXR() {
 
         let p = curve.getPoint(t);
         curve.aX = clone.position.x;
-        curve.aY = clone.position.y;
     
         ghub.position.x = p.x;
         ghub.position.z = p.y;
