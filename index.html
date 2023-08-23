@@ -24,6 +24,8 @@ async function activateXR() {
   const gl = canvas.getContext("webgl", {xrCompatible: true});
 
   // To be continued in upcoming steps.
+  const touchRay= new THREE.Raycaster();
+  const touchV = new THREE.Vector2();
   const scene = new THREE.Scene();
 
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.3);
@@ -39,12 +41,7 @@ async function activateXR() {
   const eyeColor = new THREE.MeshBasicMaterial({color: 0x000000});
   const Eye = new THREE.Mesh( eyeBall, eyeColor );
 
-  const gmap = new THREE.TextureLoader().load( 'media/githublogo.png' );
-  const gmat = new THREE.SpriteMaterial ( { map: gmap } );
-  const ghub = new THREE.Sprite( gmat );
-  ghub.scale.set(0.25, 0.25, 0.25);
-
-  const coneCyl = new THREE.ConeGeometry(0.2, 16, 16);
+  const coneCyl = new THREE.ConeGeometry(0.2, 0.4, 16);
   const coneMat = new THREE.MeshBasicMaterial( {color: 0x6e9eff});
   const cone = new THREE.Mesh(coneCyl, coneMat);
 
@@ -68,6 +65,24 @@ async function activateXR() {
     baseLayer: new XRWebGLLayer(session, gl)
   });
 
+  const gmap = new THREE.TextureLoader().load( 'media/githublogo.png' );
+  const gmat = new THREE.SpriteMaterial ( { map: gmap } );
+  const ghub = new THREE.Sprite( gmat );
+  ghub.userData.isClickable = true;
+  ghub.addEventListener("touch", (event) => {
+    const touchP = event.touches[0];
+    touchV.x = (touchP.clientX / window.innerWidth) * 2 - 1;
+    touchV.y = -(touchP.clientY / window.innerHeight) * 2 + 1;
+
+    touchRay.setfromCamera(touchV, camera);
+    const clickables = [ghub];
+    const intersects = touchRay.intersectObjects(clickables);
+    if (intersects.length > 0 && intersects[0].object.userData.isClickable) {
+      window.open('https://github.com/ArtisanGray', '_blank');
+    }
+
+  });
+  ghub.scale.set(0.25, 0.25, 0.25);
   // A 'local' reference space has a native origin that is located
   // near the viewer's position at the time the session was created.
   const referenceSpace = await session.requestReferenceSpace('local');
