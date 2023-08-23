@@ -33,6 +33,7 @@ async function activateXR() {
   const blorbBall = new THREE.SphereGeometry(0.3, 16, 16);
   const blorbColor = new THREE.MeshBasicMaterial({color: 0xe875b5});
   const Blorb = new THREE.Mesh( blorbBall, blorbColor );
+  let blorbSpawn = false;
 
 
   const renderer = new THREE.WebGLRenderer({
@@ -70,44 +71,33 @@ async function activateXR() {
     reticle.visible = false;
     scene.add(reticle);
   })
+  const curve = new THREE.EllipseCurve(
+    reticle.position.x, reticle.position.z,
+    0.5, 0.5,
+    0, 2*Math.PI,
+  );
+  const points = curve.getSpacedPoints(180);
+  const orbitGeometry = new THREE.BufferGeometry().setFromPoints(points);
+  const orbitMaterial = new THREE.LineBasicMaterial({color: 0x555555, transparent: true, opacity: 0.3});
+  const orbit = new THREE.Line(orbitGeometry, orbitMaterial);
+  orbit.rotateX(-Math.PI/2);//creates a orbit
+  scene.add(orbit);
 
   session.addEventListener("select", (event) => {
   if (Blorb) {
     const gmap = new THREE.TextureLoader().load( 'media/githublogo.png' );
     const gmat = new THREE.SpriteMaterial ( { map: gmap } );
     const ghub = new THREE.Sprite( gmat );
-    const curve = new THREE.EllipseCurve(
-    reticle.position.x, reticle.position.z,
-    0.5, 0.5,
-    0, 2*Math.PI,
-    );
-    const points = curve.getSpacedPoints(180);
-    const orbitGeometry = new THREE.BufferGeometry().setFromPoints(points);
-    const orbitMaterial = new THREE.LineBasicMaterial({color: 0x555555, transparent: true, opacity: 0.3});
-    const orbit = new THREE.Line(orbitGeometry, orbitMaterial);
-    orbit.rotateX(-Math.PI/2);//creates a orbit
+    
 
     const clone = Blorb.clone();//create blorb at desired position
     clone.position.copy(reticle.position);
+    blorbSpawn = true;
     scene.add(clone);
     scene.add(ghub);
-
-    scene.add(orbit);
-    animate();
   }
-  session.removeEventListener("select", event); //activates the hit only once, and promptly removes the listener after.
   });
-  function animate(){
-    const time = 0.0001 * performance.now();
-    const t = (time % 1) / 1;
-
-    let p = curve.getPoint(t);
-    
-    ghub.posiiton.x = p.x;
-    ghub.position.z = p.y;
-
-    session.requestAnimationFrame(animate);
-  }
+  session.removeEventListener("select", event); //activates the hit only once, and promptly removes the listener after.
   
   
 
@@ -146,6 +136,16 @@ async function activateXR() {
 
       // Render the scene with THREE.WebGLRenderer.
       renderer.render(scene, camera)
+    }
+    if (blorbSpawn == true)
+    {
+      const time = 0.0001 * performance.now();
+        const t = (time % 1) / 1;
+
+        let p = curve.getPoint(t);
+    
+        ghub.posiiton.x = p.x;
+        ghub.position.z = p.y;
     }
   }
   session.requestAnimationFrame(onXRFrame);
