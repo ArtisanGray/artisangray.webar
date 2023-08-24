@@ -148,6 +148,10 @@ async function activateXR() {
       const touchpose = frame.getViewerPose(viewerSpace);
       if (touchpose)
       {
+        const touchP = event.touches[0];
+
+        touchX = (touchP.clientX / window.innerWidth) * 2 - 1;
+        touchY = -(touchP.clientY / window.innerHeight) * 2 + 1;
         const touchTestResults = frame.getHitTestResults( //this gets the touch on screen to cast into 3D space, if it hits a specific sprite, it opens up a webpage.
           new THREE.XRHitTestSource('screen'),
         );
@@ -183,10 +187,7 @@ async function activateXR() {
     if (pose) {
       // In mobile AR, we only have one view.
       const view = pose.views[0];
-      const touchP = event.touches[0];
-
-      touchX = (touchP.clientX / window.innerWidth) * 2 - 1;
-      touchY = -(touchP.clientY / window.innerHeight) * 2 + 1;
+      
       const viewport = session.renderState.baseLayer.getViewport(view);
       renderer.setSize(viewport.width, viewport.height)
 
