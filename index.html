@@ -143,7 +143,28 @@ async function activateXR() {
 
   }
   });
-  document.addEventListener('touchstart', (event));
+  document.addEventListener('touchstart', (event) => {
+    session.requestAnimationFrame((frame) => {
+      const touchpose = frame.getViewerPose(viewerSpace);
+      if (touchpose)
+      {
+        const touchTestResults = frame.getHitTestResults( //this gets the touch on screen to cast into 3D space, if it hits a specific sprite, it opens up a webpage.
+          new THREE.XRHitTestSource('screen'),
+        );
+        if (touchTestResults.length > 0) {
+          const touchHit = touchTestResults[0];
+          const touchMatrix = new THREE.Matrix4().fromArray(hit.getPose(viewerSpace).transform.matrix)
+          const touchVector = new THREE.Vector3(touchX, touchY, 0.5);
+          touchVector.unproject(camera);
+          touchVector.applyMatrix4(hitMatrix);
+          if (ghub.geometry.boundingBox.containsPoint(touchVector)) {
+            window.open('https://github.com/ArtisanGray', '_blank');
+          }
+        }
+      }
+    });
+    
+  });
   
   
 
@@ -174,19 +195,7 @@ async function activateXR() {
       camera.projectionMatrix.fromArray(view.projectionMatrix);
       camera.updateMatrixWorld(true);
       const hitTestResults = frame.getHitTestResults(hitTestSource);
-      const touchTestResults = frame.getHitTestResults( //this gets the touch on screen to cast into 3D space, if it hits a specific sprite, it opens up a webpage.
-        new THREE.XRHitTestSource('screen'),
-      );
-      if (touchTestResults.length > 0) {
-        const touchHit = touchTestResults[0];
-        const touchMatrix = new THREE.Matrix4().fromArray(hit.getPose(viewerSpace).transform.matrix)
-        const touchVector = new THREE.Vector3(touchX, touchY, 0.5);
-        touchVector.unproject(camera);
-        touchVector.applyMatrix4(hitMatrix);
-        if (ghub.geometry.boundingBox.containsPoint(touchVector)) {
-          window.open('https://github.com/ArtisanGray', '_blank');
-        }
-      }
+      
       if (hitTestResults.length > 0 && reticle) {
         const hitPose = hitTestResults[0].getPose(referenceSpace);
         reticle.visible = true;
