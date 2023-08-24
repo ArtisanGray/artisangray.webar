@@ -143,7 +143,7 @@ async function activateXR() {
 
   }
   });
-  document.addEventListener('touchstart', (event) => {
+  session.addEventListener('touchstart', (event) => {
     session.requestAnimationFrame((frame) => {
       const touchpose = frame.getViewerPose(viewerSpace);
       if (touchpose)
